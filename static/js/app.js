@@ -230,8 +230,6 @@
         form.innerHTML =
             '<label>When are you coming?</label>' +
             '<input type="text" class="time-input" placeholder="e.g. afternoon, around 3..." maxlength="200">' +
-            '<label>Bringing anything? (optional)</label>' +
-            '<input type="text" class="bringing-input" placeholder="e.g. snacks, games..." maxlength="200">' +
             '<label>What are you coming for?</label>' +
             '<div class="category-selector"></div>' +
             '<button class="submit-visit-btn">Add Visit</button>' +
@@ -284,7 +282,7 @@
                 name: currentName,
                 day: dayKey,
                 time_text: timeText,
-                bringing: form.querySelector('.bringing-input').value.trim(),
+                bringing: '',
                 tags: tags
             }).then(function() {
                 loadData();
