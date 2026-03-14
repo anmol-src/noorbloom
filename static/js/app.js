@@ -31,13 +31,10 @@
         { key: 'thu-09-apr', label: 'Thu Apr 9' },
     ];
 
-    const TAG_LABELS = {
-        entertainment: 'Entertainment',
-        games: 'Games',
-        movies: 'Movies',
-        food: 'Food',
-        snacks: 'Snacks',
-        tea: 'Tea'
+    const CATEGORIES = {
+        help: 'Help',
+        tea: 'Tea',
+        food: 'Food'
     };
 
     const STORAGE_KEY = 'bloom_name';
@@ -136,7 +133,7 @@
 
             // Visits for this day
             var dayVisits = visits.filter(function(v) { return v.day === day.key; });
-            var allTags = {};
+            var claimedCats = {};
 
             dayVisits.forEach(function(visit) {
                 var pill = document.createElement('div');
@@ -175,45 +172,22 @@
                     card.appendChild(bringing);
                 }
 
-                // Collect tags
+                // Collect categories
                 (visit.tags || []).forEach(function(t) {
-                    if (!allTags[t]) allTags[t] = 0;
-                    allTags[t]++;
+                    if (!claimedCats[t]) claimedCats[t] = visit.name;
                 });
             });
 
-            // Tags row
-            var tagKeys = Object.keys(allTags);
-            if (tagKeys.length > 0) {
+            // Category tags row
+            var catKeys = Object.keys(claimedCats);
+            if (catKeys.length > 0) {
                 var tagsRow = document.createElement('div');
                 tagsRow.className = 'tags-row';
 
-                tagKeys.forEach(function(tag) {
+                catKeys.forEach(function(cat) {
                     var tagEl = document.createElement('span');
-                    tagEl.className = 'activity-tag tag-' + tag;
-
-                    var voteCount = votes.filter(function(v) {
-                        return v.day === day.key && v.tag === tag;
-                    }).length;
-                    var myVote = votes.some(function(v) {
-                        return v.day === day.key && v.tag === tag && v.voter_name === currentName;
-                    });
-
-                    tagEl.textContent = TAG_LABELS[tag] || tag;
-                    if (voteCount > 0) {
-                        var countSpan = document.createElement('span');
-                        countSpan.className = 'vote-count';
-                        countSpan.textContent = ' ' + voteCount;
-                        tagEl.appendChild(countSpan);
-                    }
-                    if (myVote) {
-                        tagEl.style.boxShadow = '0 0 0 2px currentColor';
-                    }
-
-                    tagEl.addEventListener('click', function() {
-                        toggleVote(day.key, tag);
-                    });
-
+                    tagEl.className = 'activity-tag tag-' + cat;
+                    tagEl.textContent = (CATEGORIES[cat] || cat) + ' \u2014 ' + claimedCats[cat];
                     tagsRow.appendChild(tagEl);
                 });
 
@@ -234,10 +208,22 @@
     }
 
     // ===== Add Visit Form =====
+    function getClaimedCats(dayKey) {
+        var claimed = {};
+        visits.filter(function(v) { return v.day === dayKey; }).forEach(function(v) {
+            (v.tags || []).forEach(function(t) {
+                claimed[t] = v.name;
+            });
+        });
+        return claimed;
+    }
+
     function showAddForm(card, dayKey) {
         // Remove any existing form in this card
         var existing = card.querySelector('.add-visit-form');
         if (existing) { existing.remove(); return; }
+
+        var claimed = getClaimedCats(dayKey);
 
         var form = document.createElement('div');
         form.className = 'add-visit-form';
@@ -246,23 +232,45 @@
             '<input type="text" class="time-input" placeholder="e.g. afternoon, around 3..." maxlength="200">' +
             '<label>Bringing anything? (optional)</label>' +
             '<input type="text" class="bringing-input" placeholder="e.g. snacks, games..." maxlength="200">' +
-            '<label>Activities</label>' +
-            '<div class="tag-selector"></div>' +
+            '<label>What are you coming for?</label>' +
+            '<div class="category-selector"></div>' +
             '<button class="submit-visit-btn">Add Visit</button>' +
             '<button class="cancel-visit-btn">Cancel</button>';
 
-        // Tag toggles
-        var selector = form.querySelector('.tag-selector');
-        var selectedTags = {};
-        Object.keys(TAG_LABELS).forEach(function(tag) {
-            var toggle = document.createElement('span');
-            toggle.className = 'tag-toggle tag-' + tag;
-            toggle.textContent = TAG_LABELS[tag];
-            toggle.addEventListener('click', function() {
-                selectedTags[tag] = !selectedTags[tag];
-                toggle.classList.toggle('selected', selectedTags[tag]);
-            });
-            selector.appendChild(toggle);
+        // Category buttons — radio behavior, 1 selection max
+        var selector = form.querySelector('.category-selector');
+        var selectedCat = null;
+        var buttons = {};
+
+        Object.keys(CATEGORIES).forEach(function(cat) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'category-btn';
+            btn.setAttribute('data-cat', cat);
+
+            if (claimed[cat]) {
+                btn.textContent = CATEGORIES[cat] + ' \u2014 ' + claimed[cat];
+                btn.classList.add('claimed');
+                btn.disabled = true;
+            } else {
+                btn.textContent = CATEGORIES[cat];
+                btn.addEventListener('click', function() {
+                    // Radio: deselect all, select this one
+                    if (selectedCat === cat) {
+                        selectedCat = null;
+                        btn.classList.remove('selected');
+                    } else {
+                        Object.keys(buttons).forEach(function(k) {
+                            buttons[k].classList.remove('selected');
+                        });
+                        selectedCat = cat;
+                        btn.classList.add('selected');
+                    }
+                });
+            }
+
+            buttons[cat] = btn;
+            selector.appendChild(btn);
         });
 
         // Submit
@@ -270,7 +278,7 @@
             var timeText = form.querySelector('.time-input').value.trim();
             if (!timeText) { form.querySelector('.time-input').focus(); return; }
 
-            var tags = Object.keys(selectedTags).filter(function(t) { return selectedTags[t]; });
+            var tags = selectedCat ? [selectedCat] : [];
 
             api('POST', '/api/visits/', {
                 name: currentName,
@@ -280,6 +288,8 @@
                 tags: tags
             }).then(function() {
                 loadData();
+            }).catch(function(err) {
+                if (err && err.error) alert(err.error);
             });
         });
 

@@ -43,8 +43,18 @@ def api_visits(request):
         if not isinstance(tags, list) or len(tags) > 10:
             return JsonResponse({'error': 'Invalid tags'}, status=400)
 
-        allowed_tags = {'entertainment', 'games', 'movies', 'food', 'snacks', 'tea'}
+        allowed_tags = {'help', 'tea', 'food'}
         tags = [t for t in tags if t in allowed_tags]
+
+        # Enforce 1 person per category per day
+        day_visits = Visit.objects.filter(day=day)
+        for tag in tags:
+            for v in day_visits:
+                if tag in (v.tags or []):
+                    return JsonResponse(
+                        {'error': f'{tag.title()} is already claimed by {v.name} on this day'},
+                        status=409
+                    )
 
         visit = Visit.objects.create(
             name=name, day=day, time_text=time_text, bringing=bringing, tags=tags

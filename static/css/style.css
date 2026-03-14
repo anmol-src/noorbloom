@@ -263,6 +263,17 @@ body {
     margin: 0 auto;
 }
 
+/* Personal Message */
+.personal-message {
+    font-family: 'Caveat', cursive;
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: #BB7799;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 0 4px;
+}
+
 /* Section Title */
 .section-title-row {
     display: flex;
@@ -399,13 +410,10 @@ body {
     opacity: 0.8;
 }
 
-/* Tag Colors */
-.tag-entertainment { background: #FFEEF4; border-color: #E8307B; color: #C4266A; }
-.tag-games        { background: #EAE0FF; border-color: #7C4DFF; color: #5A2DB5; }
-.tag-movies       { background: #E8F5E9; border-color: #43A047; color: #2E7D32; }
-.tag-food         { background: #FDE7E7; border-color: #E53935; color: #B71C1C; }
-.tag-snacks       { background: #E0F2F1; border-color: #26A69A; color: #1A7A6E; }
-.tag-tea          { background: #FFF8E1; border-color: #F9A825; color: #C17B00; }
+/* Category Tag Colors (on day cards) */
+.tag-help { background: #F3E5F5; border-color: #C850C0; color: #9C27B0; }
+.tag-tea  { background: #FFF8E1; border-color: #F9A825; color: #C17B00; }
+.tag-food { background: #FDE7E7; border-color: #E53935; color: #B71C1C; }
 
 /* Add Visit Button */
 .add-visit-btn {
@@ -476,31 +484,48 @@ body {
     color: #D4A0B0;
 }
 
-/* Tag Selector in Form */
-.tag-selector {
+/* Category Selector in Form */
+.category-selector {
     display: flex;
-    flex-wrap: wrap;
     gap: 8px;
     margin-top: 8px;
 }
 
-.tag-toggle {
-    padding: 8px 14px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
+.category-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 8px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    border: 2px solid transparent;
     cursor: pointer;
-    border: 1.5px solid;
     min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     transition: transform 0.1s, opacity 0.15s;
-    opacity: 0.5;
+    opacity: 0.45;
     user-select: none;
 }
 
-.tag-toggle.selected {
+.category-btn.selected {
     opacity: 1;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    transform: scale(1.03);
 }
+
+.category-btn.claimed {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+}
+
+.category-btn[data-cat="help"] { background: #C850C0; }
+.category-btn[data-cat="tea"]  { background: #F9A825; }
+.category-btn[data-cat="food"] { background: #E53935; }
 
 /* Submit Visit */
 .submit-visit-btn {
