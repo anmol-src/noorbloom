@@ -265,10 +265,11 @@ body {
 
 /* Personal Message */
 .personal-message {
-    font-family: 'Caveat', cursive;
-    font-weight: 500;
-    font-size: 1.2rem;
-    color: #BB7799;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    color: #5C2D4A;
     line-height: 1.6;
     margin-bottom: 24px;
     padding: 0 4px;
