@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noor's Bloom Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💗</text></svg>">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen">
+        <div id="petals-container"></div>
+        <div class="welcome-card">
+            <div class="heart-wrapper">
+                <span class="heart-emoji">&#x1F49B;</span>
+                <div class="shimmer-dots">
+                    <span class="dot">&#10022;</span><span class="dot">&#10022;</span><span class="dot">&#10022;</span>
+                    <span class="dot">&#10022;</span><span class="dot">&#10022;</span><span class="dot">&#10022;</span>
+                    <span class="dot">&#10022;</span><span class="dot">&#10022;</span>
+                </div>
+            </div>
+            <h1 class="welcome-title">Noor's Bloom Room</h1>
+            <p class="welcome-subtitle">Currently in cozy recovery mode with my ankle. If you feel like visiting, come say hi &#10024;</p>
+            <input type="text" id="name-input" class="name-input" placeholder="Your name..." maxlength="100" autocomplete="off">
+            <button id="lets-go-btn" class="lets-go-btn">Let's Go! &#127881;</button>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <div id="main-page" style="display:none;">
+        <header class="sticky-header">
+            <h1 class="header-title">Noor's Bloom Room</h1>
+            <div class="header-user">
+                Hi, <strong id="header-name"></strong>
+                <span class="change-name" id="change-name-link">&middot; change name</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="section-title-row">
+                <h2 class="section-title">Schedule</h2>
+                <div class="section-line"></div>
+            </div>
+            <div id="schedule-container"></div>
+        </main>
+    </div>
+
+    <script>
+        const CSRF_TOKEN = '{{ csrf_token }}';
+    </script>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

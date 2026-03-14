@@ -1,0 +1,14 @@
+noor.anmol.be {
+    reverse_proxy localhost:8003
+
+    handle_path /static/* {
+        root * /opt/noor-bloom-room/staticfiles
+        file_server
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+    }
+}
