@@ -57,6 +57,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# django-ratelimit: use X-Real-IP header forwarded by nginx (REMOTE_ADDR is
+# empty when Gunicorn runs behind a Unix socket reverse proxy)
+RATELIMIT_IP_META_KEY = 'HTTP_X_REAL_IP'
+
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
