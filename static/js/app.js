@@ -61,6 +61,35 @@
         }
     }
 
+    // ===== Main Page Petals =====
+    function createMainPetals() {
+        var container = document.getElementById('main-petals-container');
+        if (container.childElementCount > 0) return; // only create once
+        var symbols = ['✿', '❀'];
+        var colors = ['#FF6B9D', '#FF1493', '#FFB6C1', '#FFA751', '#B197FC', '#69DB7C', '#FF6969'];
+
+        for (var i = 0; i < 20; i++) {
+            var span = document.createElement('span');
+            span.className = 'petal';
+            span.textContent = symbols[i % 2];
+            span.style.left = (Math.random() * 100) + '%';
+            span.style.fontSize = (16 + Math.random() * 22) + 'px';
+            span.style.color = colors[i % colors.length];
+            var dur = (8 + Math.random() * 8).toFixed(1);
+            var delay = (Math.random() * 12).toFixed(1);
+            var isSparkly = Math.random() < 0.3;
+            if (isSparkly) {
+                var sparkleDur = (1.2 + Math.random() * 1.2).toFixed(1);
+                var sparkleDelay = (Math.random() * 2).toFixed(1);
+                span.style.animation = 'floatUp ' + dur + 's linear ' + delay + 's infinite, sparkle ' + sparkleDur + 's ease-in-out ' + sparkleDelay + 's infinite';
+            } else {
+                span.style.animationDuration = dur + 's';
+                span.style.animationDelay = delay + 's';
+            }
+            container.appendChild(span);
+        }
+    }
+
     // ===== Navigation =====
     function getName() {
         return localStorage.getItem(STORAGE_KEY) || '';
@@ -75,6 +104,7 @@
         document.getElementById('welcome-screen').style.display = 'none';
         document.getElementById('main-page').style.display = 'block';
         document.getElementById('header-name').textContent = currentName;
+        createMainPetals();
         loadData();
     }
 

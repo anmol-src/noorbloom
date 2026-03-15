@@ -206,10 +206,28 @@ body {
     box-shadow: 0 6px 24px rgba(255, 107, 157, 0.4);
 }
 
+/* ===== Main Page Petals ===== */
+#main-petals-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    30%       { opacity: 0.95; transform: scale(1.35); }
+    60%       { opacity: 0.35; transform: scale(0.9); }
+    80%       { opacity: 0.9;  transform: scale(1.2); }
+}
+
 /* ===== Main Page ===== */
 #main-page {
     background: #FFF5F7;
     min-height: 100vh;
+    position: relative;
+    z-index: 1;
 }
 
 /* Sticky Header */
