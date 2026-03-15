@@ -266,8 +266,8 @@
             '<input type="text" class="time-input" placeholder="e.g. afternoon, around 3..." maxlength="200">' +
             '<label>What are you coming for?</label>' +
             '<div class="category-selector"></div>' +
-            '<button class="submit-visit-btn">Add Visit</button>' +
-            '<button class="cancel-visit-btn">Cancel</button>';
+            '<button type="button" class="submit-visit-btn">Add Visit</button>' +
+            '<button type="button" class="cancel-visit-btn">Cancel</button>';
 
         // Category buttons — radio behavior, 1 selection max
         var selector = form.querySelector('.category-selector');
@@ -306,9 +306,13 @@
         });
 
         // Submit
-        form.querySelector('.submit-visit-btn').addEventListener('click', function() {
+        var submitBtn = form.querySelector('.submit-visit-btn');
+        submitBtn.addEventListener('click', function() {
             var timeText = form.querySelector('.time-input').value.trim();
             if (!timeText) { form.querySelector('.time-input').focus(); return; }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adding...';
 
             var tags = selectedCat ? [selectedCat] : [];
 
@@ -319,9 +323,13 @@
                 bringing: '',
                 tags: tags
             }).then(function() {
+                form.remove();
                 loadData();
             }).catch(function(err) {
-                if (err && err.error) alert(err.error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Visit';
+                var msg = (err && err.error) ? err.error : 'Something went wrong. Please try again.';
+                alert(msg);
             });
         });
 
