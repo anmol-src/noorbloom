@@ -105,6 +105,7 @@
         document.getElementById('main-page').style.display = 'block';
         document.getElementById('header-name').textContent = currentName;
         createMainPetals();
+        renderSchedule(); // render skeleton immediately — don't wait for API
         loadData();
     }
 
@@ -124,7 +125,7 @@
         });
     }
 
-    function loadData() {
+    function loadData(retry) {
         Promise.all([
             api('GET', '/api/visits/'),
             api('GET', '/api/votes/')
@@ -132,6 +133,9 @@
             visits = results[0];
             votes = results[1];
             renderSchedule();
+        }).catch(function() {
+            // Skeleton already visible — retry once after 3s on first failure
+            if (!retry) setTimeout(function() { loadData(true); }, 3000);
         });
     }
 
