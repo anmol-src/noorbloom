@@ -16,6 +16,7 @@ body {
     color: #4A3040;
     min-height: 100vh;
     overflow-x: hidden;
+    background: #FFF5F7;
 }
 
 /* ===== Welcome Screen ===== */
@@ -224,7 +225,7 @@ body {
 
 /* ===== Main Page ===== */
 #main-page {
-    background: #FFF5F7;
+    background: transparent;
     min-height: 100vh;
 }
 
@@ -277,6 +278,8 @@ body {
     padding: 20px 16px 40px;
     max-width: 600px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 /* Personal Message */

@@ -76,7 +76,7 @@
             span.style.fontSize = (16 + Math.random() * 22) + 'px';
             span.style.color = colors[i % colors.length];
             var dur = (8 + Math.random() * 8).toFixed(1);
-            var delay = (Math.random() * 12).toFixed(1);
+            var delay = (i < 5 ? 0 : Math.random() * 4).toFixed(1); // first 5 start immediately
             var isSparkly = Math.random() < 0.3;
             if (isSparkly) {
                 var sparkleDur = (1.2 + Math.random() * 1.2).toFixed(1);
