@@ -226,8 +226,6 @@ body {
 #main-page {
     background: #FFF5F7;
     min-height: 100vh;
-    position: relative;
-    z-index: 1;
 }
 
 /* Sticky Header */
